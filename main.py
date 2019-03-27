@@ -20,7 +20,9 @@ config = AppConfig()
 scale = None
 gamma_scale = None
 color_option = None
+
 currentcolor_var = None
+postrenderselect_var = None
 
 def makeform(root, f):
     entries = {}
@@ -67,6 +69,13 @@ def makecoloroptionmenu(root):
     color_option.pack(side=RIGHT, expand=YES, fill=X)
     return color_option
 
+def makesaveselectmenu(root):
+    labelframe = LabelFrame(root, text='Post render step selection')
+    save_radio = Radiobutton(labelframe, text='Save as PNG', value=1, variable=postrenderselect_var)
+    show_radio = Radiobutton(labelframe, text='Show figure', value=2, variable=postrenderselect_var)
+    labelframe.pack(side=TOP, fill=X, padx=5, pady=5)
+    save_radio.pack(side=LEFT)
+    show_radio.pack(side=LEFT)
 
 def init_fields(ents):
     ents[x_s].delete(0, END)
@@ -114,7 +123,10 @@ def run_calculation(data, iters, gamma, cmap):
     program.mandelbrot_coord(coords, maxiter=it_i, gamma=gmm_f, cmap=cmp_s, height=h_i, width=w_i)
     end = time.process_time()
     print('Calculation complete. Elapsed: {}s'.format(end - start))
-    #program.showfig() #disabled due to saving resolution bug.  
+    if postrenderselect_var.get() == 1:
+        save_calc()
+    else:
+        program.showfig()
 
 def save_calc():
     print('Saving image...')
@@ -138,12 +150,15 @@ if __name__ == '__main__':
     currentcolor_var = StringVar(root)
     currentcolor_var.set(config.image['cmap'])
     color_option = makecoloroptionmenu(root)
+    postrenderselect_var = IntVar(root)
+    makesaveselectmenu(root)
+    postrenderselect_var.set(2)
     root.bind('<Return>', (lambda event, e =ents: fetch(e)))
     
     btn_run = Button(root, text='Run', command=(lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var: run_calculation(e, it, gm, c)))
     btn_run.pack(side=LEFT, padx=5, pady=5)
-    btn_save = Button(root, text='Save Visualization', command=save_calc)
-    btn_save.pack(side=LEFT, padx=5, pady=5)
+    # btn_save = Button(root, text='Save Visualization', command=save_calc)
+    # btn_save.pack(side=LEFT, padx=5, pady=5)
     btn_show = Button(root, text='Show folder', command=(lambda : subprocess.Popen(r'explorer "%s"' % loacl_path)) if platform.system() == 'Windows' else print('Not supported in this OS! Open it yourself.'))
     btn_show.pack(side=LEFT, padx=5, pady=5)
 
