@@ -140,4 +140,9 @@ if __name__ == '__main__':
     btn_save.pack(side=LEFT, padx=5, pady=5)
     btn_show = Button(root, text='Show folder', command=(lambda : subprocess.Popen(r'explorer "%s"' % loacl_path)) if platform.system() == 'Windows' else print('Not supported in this OS! Open it yourself.'))
     btn_show.pack(side=LEFT, padx=5, pady=5)
+
+    row = Frame(root)
+    row.pack(side=TOP, fill=X, padx=5, pady=5)
+    btn_exportcfg = Button(row, text='Export config', command=(lambda: config.export_config()))
+    btn_exportcfg.pack(side=LEFT)
     root.mainloop()
