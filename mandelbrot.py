@@ -4,18 +4,7 @@ import numpy as np
 class MandelbrotJIT():
 
     @staticmethod
-    @jit
-    def mandelbrot(z,maxiter,horizon,log_horizon):
-        c = z
-        for n in range(maxiter):
-            az = abs(z)
-            if az > horizon:
-                return n - np.log(np.log(az))/np.log(2) + log_horizon
-            z = z*z + c
-        return 0
-
-    @staticmethod
-    @jit(parallel=True)
+    @jit(parallel=True, nopython=True)
     def mandelbrot_set(xmin,xmax,ymin,ymax,width,height,maxiter):
         horizon = 2.0 ** 40
         log_horizon = np.log(np.log(horizon))/np.log(2)
@@ -24,7 +13,15 @@ class MandelbrotJIT():
         n3 = np.empty((width,height))
         for i in range(width):
             for j in range(height):
-                n3[i,j] = MandelbrotJIT.mandelbrot(r1[i] + 1j*r2[j],maxiter,horizon, log_horizon)
+                #mandelbrot actual calculation happening here
+                z = r1[i] + 1j*r2[j]
+                c = z
+                for n in range(maxiter):
+                    az = abs(z)
+                    if az > horizon:
+                        n3[i,j] = n - np.divide(np.log(np.log(az)), np.log(2)) + log_horizon
+                        break
+                    z = z*z + c
         return (r1,r2,n3)
 
 from matplotlib import pyplot as plt
