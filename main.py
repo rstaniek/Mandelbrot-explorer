@@ -1,7 +1,7 @@
 from tkinter import *
 from mandelbrot import Coordinates, Mandelbrot
 from guiconfig import AppConfig
-import time
+import time, subprocess, os, platform
 import numpy as np
 
 fields = ('X offset', 'Y offset', 'Zoom level', 'Image Height', 'Image Width')
@@ -122,6 +122,7 @@ def save_calc():
     print('Image saved!')
 
 if __name__ == '__main__':
+    loacl_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"images")
     root = Tk()
     config.get_config()
     ents = makeform(root, fields)
@@ -137,4 +138,6 @@ if __name__ == '__main__':
     btn_run.pack(side=LEFT, padx=5, pady=5)
     btn_save = Button(root, text='Save Visualization', command=save_calc)
     btn_save.pack(side=LEFT, padx=5, pady=5)
+    btn_show = Button(root, text='Show folder', command=(lambda : subprocess.Popen(r'explorer "%s"' % loacl_path)) if platform.system() == 'Windows' else print('Not supported in this OS! Open it yourself.'))
+    btn_show.pack(side=LEFT, padx=5, pady=5)
     root.mainloop()

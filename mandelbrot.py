@@ -15,7 +15,7 @@ class MandelbrotJIT():
         return 0
 
     @staticmethod
-    @jit
+    @jit(parallel=True)
     def mandelbrot_set(xmin,xmax,ymin,ymax,width,height,maxiter):
         horizon = 2.0 ** 40
         log_horizon = np.log(np.log(horizon))/np.log(2)

@@ -9,7 +9,6 @@ class AppConfig():
         self.iter_steps = []
         self.cmaps = []
         self.image = {}
-        self.get_config()
         return super().__init__(*args, **kwargs)
 
     def get_config(self):
