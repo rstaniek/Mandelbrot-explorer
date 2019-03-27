@@ -66,12 +66,13 @@ class Mandelbrot():
             fig.savefig(filename, bbox_inches='tight', pad_inches = 0)
 
     def save_visualization(self):
-        filename = "images/mandelbrodt_%s.png" % time.strftime("%d-%m-%Y")
+        filename = "images\mandelbrodt_%s.png" % time.strftime("%d-%m-%Y")
         self.ax.set_axis_off()
         self.ax.xaxis.set_major_locator(plt.NullLocator())
         self.ax.yaxis.set_major_locator(plt.NullLocator())
         self.ax.set_frame_on(False)
         self.fig.savefig(filename, bbox_inches='tight', pad_inches = 0)
+        return filename
 
     def showfig(self):
         self.fig.show()

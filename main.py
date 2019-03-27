@@ -114,12 +114,18 @@ def run_calculation(data, iters, gamma, cmap):
     program.mandelbrot_coord(coords, maxiter=it_i, gamma=gmm_f, cmap=cmp_s, height=h_i, width=w_i)
     end = time.process_time()
     print('Calculation complete. Elapsed: {}s'.format(end - start))
-    program.showfig()   
+    #program.showfig() #disabled due to saving resolution bug.  
 
 def save_calc():
     print('Saving image...')
-    program.save_visualization()
+    file = program.save_visualization()
     print('Image saved!')
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), file)
+    print(path)
+    if platform.system() == 'Windows':
+        subprocess.Popen(r'explorer /select,"%s"' % path)  
+    else:
+        print('Not supported in this OS! Open it yourself.')
 
 if __name__ == '__main__':
     loacl_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), r"images")
