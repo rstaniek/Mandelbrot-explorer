@@ -153,7 +153,7 @@ if __name__ == '__main__':
     postrenderselect_var = IntVar(root)
     makesaveselectmenu(root)
     postrenderselect_var.set(2)
-    root.bind('<Return>', (lambda event, e =ents: fetch(e)))
+    root.bind('<Return>', (lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var: run_calculation(e, it, gm, c)))
     
     btn_run = Button(root, text='Run', command=(lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var: run_calculation(e, it, gm, c)))
     btn_run.pack(side=LEFT, padx=5, pady=5)

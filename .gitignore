@@ -59,3 +59,8 @@ target/
 
 #generated images
 *.png
+
+.vscode/
+
+config.exported.json
+config.json
