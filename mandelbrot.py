@@ -4,7 +4,7 @@ import numpy as np
 class MandelbrotJIT():
 
     @staticmethod
-    #@jit(parallel=True, nopython=True)
+    @jit(parallel=True, nopython=True)
     def mandelbrot_set(xmin,xmax,ymin,ymax,width,height,maxiter):
         horizon = 2.0 ** 40
         log_horizon = np.log(np.log(horizon))/np.log(2)
