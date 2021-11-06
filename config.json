@@ -1,19 +1,31 @@
 {
     "coordinates": {
-        "x": 0.0, 
-        "y": 0.0, 
-        "zoom": 1.0
-    }, 
+        "x": -0.48,
+        "y": 0.08,
+        "zoom": 3.0
+    },
     "static_data": {
-        "iter_steps": [256, 512, 1024, 2048, 4096, 8192], 
-        "cmaps": ["magma", "jet", "gnuplot2", "viridis"]
-    }, 
+        "iter_steps": [
+            256,
+            512,
+            1024,
+            2048,
+            4096,
+            8192
+        ],
+        "cmaps": [
+            "magma",
+            "jet",
+            "gnuplot2",
+            "viridis"
+        ]
+    },
     "image_settings": {
-        "gamma": 0.3, 
-        "cmap": "magma", 
+        "gamma": 0.4,
+        "cmap": "viridis",
         "size": {
-            "height": 10, 
-            "width": 10
+            "height": 15,
+            "width": 15
         }
     }
 }

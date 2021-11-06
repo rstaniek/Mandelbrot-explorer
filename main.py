@@ -23,6 +23,7 @@ color_option = None
 
 currentcolor_var = None
 postrenderselect_var = None
+showborder_var = None
 
 def makeform(root, f):
     entries = {}
@@ -69,6 +70,12 @@ def makecoloroptionmenu(root):
     color_option.pack(side=RIGHT, expand=YES, fill=X)
     return color_option
 
+def makeBorderCheckbox(root):
+    row = Frame(root)
+    border_check = Checkbutton(row, text='Border enabled', variable=showborder_var, onvalue=True, offvalue=False)
+    border_check.pack(side=LEFT)
+    row.pack(side=TOP, expand=YES, fill=X)
+
 def makesaveselectmenu(root):
     labelframe = LabelFrame(root, text='Post render step selection')
     save_radio = Radiobutton(labelframe, text='Save as PNG', value=1, variable=postrenderselect_var)
@@ -104,7 +111,7 @@ def save_imgdata(cmap, gamma, img_h, img_w):
     cfg['size'] = {'height': img_h, 'width': img_w}
     config.update_config(image=cfg)
 
-def run_calculation(data, iters, gamma, cmap):
+def run_calculation(data, iters, gamma, cmap, sb):
     program.close_all_figs()
     x_f = float(data[x_s].get())
     y_f = float(data[y_s].get())
@@ -120,7 +127,7 @@ def run_calculation(data, iters, gamma, cmap):
         .format(x_f, y_f, z_f, it_i, gmm_f, cmp_s, h_i, w_i))
     start = time.process_time()
     coords = Coordinates.from_values(x_f, y_f, z_f)
-    program.mandelbrot_coord(coords, maxiter=it_i, gamma=gmm_f, cmap=cmp_s, height=h_i, width=w_i)
+    program.mandelbrot_coord(coords, maxiter=it_i, gamma=gmm_f, cmap=cmp_s, height=h_i, width=w_i, showborder=sb.get())
     end = time.process_time()
     print('Calculation complete. Elapsed: {}s'.format(end - start))
     if postrenderselect_var.get() == 1:
@@ -147,15 +154,23 @@ if __name__ == '__main__':
     ents = init_fields(ents)
     scale = makeiterscale(root)
     gamma_scale = makegammascale(root)
+    #border_checkbox = makeBorderCheckbox(root)
     currentcolor_var = StringVar(root)
     currentcolor_var.set(config.image['cmap'])
     color_option = makecoloroptionmenu(root)
     postrenderselect_var = IntVar(root)
     makesaveselectmenu(root)
     postrenderselect_var.set(2)
-    root.bind('<Return>', (lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var: run_calculation(e, it, gm, c)))
+    showborder_var = BooleanVar(root)
+    makeBorderCheckbox(root)
+    showborder_var.set(True)
+
+    def onReturn(e):
+        (lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var, sb=showborder_var: run_calculation(e, it, gm, c, sb))
+
+    root.bind('<Return>', onReturn)
     
-    btn_run = Button(root, text='Run', command=(lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var: run_calculation(e, it, gm, c)))
+    btn_run = Button(root, text='Run', command=(lambda e=ents, it=scale, gm=gamma_scale, c=currentcolor_var, sb=showborder_var: run_calculation(e, it, gm, c, sb)))
     btn_run.pack(side=LEFT, padx=5, pady=5)
     # btn_save = Button(root, text='Save Visualization', command=save_calc)
     # btn_save.pack(side=LEFT, padx=5, pady=5)

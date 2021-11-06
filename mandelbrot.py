@@ -4,7 +4,7 @@ import numpy as np
 class MandelbrotJIT():
 
     @staticmethod
-    @jit(parallel=True, nopython=True)
+    #@jit(parallel=True, nopython=True)
     def mandelbrot_set(xmin,xmax,ymin,ymax,width,height,maxiter):
         horizon = 2.0 ** 40
         log_horizon = np.log(np.log(horizon))/np.log(2)
@@ -146,6 +146,7 @@ class Mandelbrot():
             ax.xaxis.set_major_locator(plt.NullLocator())
             ax.yaxis.set_major_locator(plt.NullLocator())
             ax.set_frame_on(False)
+            plt.axis('off')
         
         norm = colors.PowerNorm(gamma)
         ax.imshow(z.T,cmap=cmap,origin='lower',norm=norm)  
